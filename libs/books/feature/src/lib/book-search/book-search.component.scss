@@ -68,5 +68,18 @@ form {
   justify-content: center;
   min-height: 50vh;
   font-size: 1.5rem;
-  color: $gray40;
+  color: $gray85;
+
+  p {
+    a {
+      color: $pink-dark;
+    }
+  }
+}
+.search-button {
+  padding-left: 0;
+  cursor: pointer;
+  color: $pink-accent;
+  background-color: transparent;
+  border: transparent;
 }

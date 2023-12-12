@@ -22,8 +22,7 @@
 }
 
 .reading-list-item--cover {
-  max-width: 36px;
-  max-height: 36px;
+  max-width: 90px;
   margin-right: $spacing-xxs;
 }
 
@@ -35,13 +34,11 @@
 
 .reading-list-item--details--title,
 .reading-list-item--details--author {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+  font-size: 1rem;
 }
 
 .empty {
-  font-weight: 100;
+  font-weight: 400;
   font-size: 1rem;
-  color: $gray60;
+  color: $gray80;
 }

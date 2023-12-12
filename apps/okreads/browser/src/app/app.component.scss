@@ -14,7 +14,7 @@ h1 {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: $pink-accent;
+  background-color: $pink-dark;
   color: $white;
   padding: $spacing-3xs $spacing-xs;
 
@@ -25,6 +25,17 @@ h1 {
 
 .header--content {
   display: flex;
+
+  button {
+    font-size: 1rem;
+    color: $pink-dark;
+    background: $white;
+
+    &:hover {
+      background: $gray10;
+      color: $pink-very-dark;
+    }
+  }
 
   > * {
     display: flex;
@@ -59,6 +70,11 @@ main {
     right: $spacing-xxs;
     padding: 0;
     min-width: 36px;
+
+    &:hover {
+      background: $white;
+      color: $gray85;
+    }
   }
 }
 

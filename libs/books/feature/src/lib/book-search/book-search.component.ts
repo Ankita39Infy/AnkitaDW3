@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -8,18 +8,21 @@ import {
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
-  styleUrls: ['./book-search.component.scss']
+  styleUrls: ['./book-search.component.scss'],
 })
-export class BookSearchComponent {
+export class BookSearchComponent implements OnInit, OnDestroy {
   books = this.store.select(getAllBooks);
-
   searchForm = this.fb.group({
-    term: ''
+    term: '',
   });
+
+  unSubscribeSubject$ = new Subject();
 
   constructor(
     private readonly store: Store,
@@ -28,6 +31,24 @@ export class BookSearchComponent {
 
   get searchTerm(): string {
     return this.searchForm.value.term;
+  }
+
+  ngOnInit(): void {
+    this.searchForm.controls["term"].valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        takeUntil(this.unSubscribeSubject$)
+      )
+      .subscribe(
+        () => this.searchBooks(),
+        (error) => console.error(error, "Something went wrong")
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.unSubscribeSubject$.next();
+    this.unSubscribeSubject$.complete();
   }
 
   addBookToReadingList(book: Book) {

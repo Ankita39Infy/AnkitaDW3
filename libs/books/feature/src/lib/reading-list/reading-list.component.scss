@@ -37,6 +37,17 @@
   font-size: 1rem;
 }
 
+.reading-list-item-finished-text {
+    color: $green;
+    margin-top: $spacing-3xs;
+}
+
+.mark-finish-circle {
+    color: $green;
+    width: 20%;
+    padding-bottom: $spacing-3xs;
+}
+
 .empty {
   font-weight: 400;
   font-size: 1rem;

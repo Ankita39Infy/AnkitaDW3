@@ -14,13 +14,33 @@
       <div class="reading-list-item--details--author">
         <i>By : {{ book.authors.join(", ") }}</i>
       </div>
+      <div
+        *ngIf="book.finished; else notFinished"
+        class="reading-list-item-finished-text"
+      >
+        <i>Finished on : {{ book.finishedDate | date }}</i>
+      </div>
+
+      <ng-template #notFinished>
+        <button
+          mat-icon-button
+          [attr.aria-label]="'Mark ' + book.title + ' as finished'"
+          [title]="'Mark ' + book.title + ' as finished'"
+          (click)="markBookAsFinished(book)"
+          data-testing="mark-as-finished"
+        >
+          <mat-icon class="mark-finish-circle">check_circle</mat-icon>
+        </button>
+      </ng-template>
     </div>
     <div>
       <button
         mat-icon-button
         color="warn"
         [attr.aria-label]="'Remove ' + book.title + ' from reading list'"
+        [title]="'Remove ' + book.title + ' from reading list'"
         (click)="removeFromReadingList(book)"
+        data-testing="remove-book-button"
       >
         <mat-icon>remove_circle</mat-icon>
       </button>

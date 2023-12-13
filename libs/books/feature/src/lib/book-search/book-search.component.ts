@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -30,13 +30,13 @@ export class BookSearchComponent {
     return this.searchForm.value.term;
   }
 
-  addBookToReadingList(book: Book) {
-    this.store.dispatch(addToReadingList({ book }));
-  }
-
   searchExample() {
     this.searchForm.controls.term.setValue("javaScript");
     this.searchBooks();
+  }
+
+  addBookToReadingList(book: Book) {
+    this.store.dispatch(addToReadingList({ book, addBook: true }));
   }
 
   searchBooks() {
@@ -45,5 +45,9 @@ export class BookSearchComponent {
     } else {
       this.store.dispatch(clearSearch());
     }
+  }
+
+  clearSearch() {
+    this.searchForm.controls.term.reset();
   }
 }

@@ -7,7 +7,7 @@ import {
 } from './reading-list.reducer';
 import { createBook, createReadingListItem } from '@tmo/shared/testing';
 
-describe('Books Reducer', () => {
+describe('Reading List Reducer', () => {
   describe('valid Books actions', () => {
     let state: State;
 
@@ -44,7 +44,7 @@ describe('Books Reducer', () => {
 
     it('failedRemoveFromReadingList should undo book removal from the state', () => {
       const action = ReadingListActions.failedRemoveFromReadingList({
-        item: createReadingListItem('C')
+        readingListItem: createReadingListItem('C')
       });
 
       const result: State = reducer(state, action);

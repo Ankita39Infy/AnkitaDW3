@@ -22,7 +22,7 @@
     <div
       class="book"
       data-testing="book-item"
-      *ngFor="let book of books$ | async"
+      *ngFor="let book of books | async"
     >
       <div class="book--title">
         {{ book.title }}
@@ -46,6 +46,7 @@
               (click)="addBookToReadingList(book)"
               aria-label="Add Book To Reading List"
               [disabled]="book.isAdded"
+              data-testing="add-book-button"
             >
               Want to Read
             </button>

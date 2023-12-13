@@ -21,12 +21,13 @@
         color="warn"
         [attr.aria-label]="'Remove ' + book.title + ' from reading list'"
         (click)="removeFromReadingList(book)"
-      >
+		    data-testing="remove-book-button">
+        >
         <mat-icon>remove_circle</mat-icon>
       </button>
     </div>
   </div>
 </ng-container>
 <ng-template #empty>
-  <p class="empty">You haven't added any books to your reading list yet.</p>
+	<p class="empty">You haven't added any books to your reading list yet.</p>
 </ng-template>

@@ -8,55 +8,77 @@ import * as ReadingListActions from './reading-list.actions';
 
 @Injectable()
 export class ReadingListEffects implements OnInitEffects {
-  loadReadingList$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ReadingListActions.init),
-      exhaustMap(() =>
-        this.http.get<ReadingListItem[]>('/api/reading-list').pipe(
-          map((data) =>
-            ReadingListActions.loadReadingListSuccess({ list: data })
-          ),
-          catchError((error) =>
-            of(ReadingListActions.loadReadingListError({ error }))
-          )
-        )
-      )
-    )
-  );
+    loadReadingList$ = createEffect(() =>
+                                         this.actions$.pipe(
+                                             ofType(ReadingListActions.init),
+                                             exhaustMap(() =>
+                                                             this.http.get<ReadingListItem[]>('/api/reading-list').pipe(
+                                                                 map((data) =>
+                                                                          ReadingListActions.loadReadingListSuccess({ list: data })
+                                                                 ),
+                                                                 catchError((error) =>
+                                                                                 of(ReadingListActions.loadReadingListError({ error }))
+                                                                 )
+                                                             )
+                                             )
+                                         )
+    );
 
-  addBook$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ReadingListActions.addToReadingList),
-      concatMap(({ book }) =>
-        this.http.post('/api/reading-list', book).pipe(
-          map(() => ReadingListActions.confirmedAddToReadingList({ book })),
-          catchError(() =>
-            of(ReadingListActions.failedAddToReadingList({ book }))
-          )
-        )
-      )
-    )
-  );
+    addBook$ = createEffect(() =>
+                                 this.actions$.pipe(
+                                     ofType(ReadingListActions.addToReadingList),
+                                     concatMap(({ book }) =>
+                                                    this.http.post('/api/reading-list', book).pipe(
+                                                        map(() => ReadingListActions.confirmedAddToReadingList({ book })),
+                                                        catchError(() =>
+                                                                        of(ReadingListActions.failedAddToReadingList({ book }))
+                                                        )
+                                                    )
+                                     )
+                                 )
+    );
 
-  removeBook$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ReadingListActions.removeFromReadingList),
-      concatMap(({ item }) =>
-        this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
-          map(() =>
-            ReadingListActions.confirmedRemoveFromReadingList({ item })
-          ),
-          catchError(() =>
-            of(ReadingListActions.failedRemoveFromReadingList({ item }))
-          )
-        )
-      )
-    )
-  );
+    markBookAsFinished$ = createEffect( () =>
+                                            this.actions$.pipe(
+                                                ofType( ReadingListActions.markBookAsFinished ),
+                                                concatMap( ( { item, finishedDate } ) => {
+                                                    return this.http.put(
+                                                        `/api/reading-list/${ item.bookId }/finished`, { finishedDate }
+                                                    )
+                                                    .pipe(
+                                                      map(() => ReadingListActions.markBookAsFinishedSuccess({item, finishedDate})),
+                                                      catchError(() =>
+                                                        of(
+                                                          ReadingListActions.failedToMarkBookAsFinished(
+                                                            { item } )
+                                                         
+                                                        )
+                                                      )
+                                                    );
+                                                } )
+                                            ), {
+                                            dispatch : false
+                                        } );
+                                        
+    removeBook$ = createEffect( () =>
+                                    this.actions$.pipe(
+                                        ofType(ReadingListActions.removeFromReadingList),
+                                        concatMap(({ item }) =>
+                                                       this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
+                                                           map(() =>
+                                                                    ReadingListActions.confirmedRemoveFromReadingList({ item })
+                                                           ),
+                                                           catchError(() =>
+                                                                           of(ReadingListActions.failedRemoveFromReadingList({ item }))
+                                                           )
+                                                       )
+                                        )
+                                    )
+    );
 
-  ngrxOnInitEffects() {
-    return ReadingListActions.init();
-  }
+    ngrxOnInitEffects() {
+        return ReadingListActions.init();
+    }
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+    constructor( private actions$: Actions, private http: HttpClient ) {}
 }
